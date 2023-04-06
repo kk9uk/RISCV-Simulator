@@ -1,14 +1,3 @@
-/***************************************************************/
-/*                                                             */
-/*                  RISCV-LC Simulator                         */
-/*                                                             */
-/*                     CEG3420 Lab2                            */
-/*                 cbai@cse.cuhk.edu.hk                        */
-/*           The Chinese University of Hong Kong               */
-/*                                                             */
-/***************************************************************/
-
-
 #ifndef __LC_SIM_H__
 #define __LC_SIM_H__
 

@@ -1,14 +1,3 @@
-/***************************************************************/
-/*                                                             */
-/*                  RISCV-LC Simulator                         */
-/*                                                             */
-/*                     CEG3420 Lab2                            */
-/*                 cbai@cse.cuhk.edu.hk                        */
-/*           The Chinese University of Hong Kong               */
-/*                                                             */
-/***************************************************************/
-
-
 #include "sim.h"
 
 
@@ -273,8 +262,9 @@ void handle_slli(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: SLLI\n");
-    exit(EXIT_FAILURE);
+    unsigned int rd = MASK11_7(cur_inst), rs1 = MASK19_15(cur_inst);
+    int imm5 = MASK24_20(cur_inst);
+    NEXT_LATCHES.REGS[rd] = CURRENT_LATCHES.REGS[rs1] << imm5;
 }
 
 
@@ -283,8 +273,9 @@ void handle_xori(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: XORI\n");
-    exit(EXIT_FAILURE);
+    unsigned int rd = MASK11_7(cur_inst), rs1 = MASK19_15(cur_inst);
+    int imm12 = sext(MASK31_20(cur_inst), 12);
+    NEXT_LATCHES.REGS[rd] = CURRENT_LATCHES.REGS[rs1] ^ imm12;
 }
 
 
@@ -292,8 +283,12 @@ void handle_srli(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: SRLI\n");
-    exit(EXIT_FAILURE);
+    unsigned int rd = MASK11_7(cur_inst), rs1 = MASK19_15(cur_inst);
+    int imm5 = MASK24_20(cur_inst);
+    long MAGIC = 0x00000000FFFFFFFF, long_rs1 = (long) CURRENT_LATCHES.REGS[rs1];
+    long_rs1 = long_rs1 >> imm5;
+    MAGIC = MAGIC >> imm5;
+    NEXT_LATCHES.REGS[rd] = (int) (long_rs1 & MAGIC);
 }
 
 
@@ -301,8 +296,9 @@ void handle_srai(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: SRAI\n");
-    exit(EXIT_FAILURE);
+    unsigned int rd = MASK11_7(cur_inst), rs1 = MASK19_15(cur_inst);
+    int imm5 = MASK24_20(cur_inst);
+    NEXT_LATCHES.REGS[rd] = CURRENT_LATCHES.REGS[rs1] >> imm5;
 }
 
 
@@ -310,8 +306,9 @@ void handle_ori(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: ORI\n");
-    exit(EXIT_FAILURE);
+    unsigned int rd = MASK11_7(cur_inst), rs1 = MASK19_15(cur_inst);
+    int imm12 = sext(MASK31_20(cur_inst), 12);
+    NEXT_LATCHES.REGS[rd] = CURRENT_LATCHES.REGS[rs1] | imm12;
 }
 
 
@@ -319,8 +316,9 @@ void handle_andi(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: ANDI\n");
-    exit(EXIT_FAILURE);
+    unsigned int rd = MASK11_7(cur_inst), rs1 = MASK19_15(cur_inst);
+    int imm12 = sext(MASK31_20(cur_inst), 12);
+    NEXT_LATCHES.REGS[rd] = CURRENT_LATCHES.REGS[rs1] & imm12;
 }
 
 
@@ -328,8 +326,9 @@ void handle_lui(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: LUI\n");
-    exit(EXIT_FAILURE);
+    unsigned int rd = MASK11_7(cur_inst);
+    int imm20 = sext(MASK31_12(cur_inst), 20);
+    NEXT_LATCHES.REGS[rd] = (imm20 << 12);
 }
 
 
@@ -345,8 +344,10 @@ void handle_sub(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: SUB\n");
-    exit(EXIT_FAILURE);
+    unsigned int rd = MASK11_7(cur_inst),
+		rs1 = MASK19_15(cur_inst),
+        rs2 = MASK24_20(cur_inst);
+    NEXT_LATCHES.REGS[rd] = CURRENT_LATCHES.REGS[rs1] - CURRENT_LATCHES.REGS[rs2];
 }
 
 
@@ -354,8 +355,10 @@ void handle_sll(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: SLL\n");
-    exit(EXIT_FAILURE);
+    unsigned int rd = MASK11_7(cur_inst),
+		rs1 = MASK19_15(cur_inst),
+        rs2 = MASK24_20(cur_inst);
+    NEXT_LATCHES.REGS[rd] = CURRENT_LATCHES.REGS[rs1] << CURRENT_LATCHES.REGS[rs2];
 }
 
 
@@ -363,8 +366,10 @@ void handle_xor(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: XOR\n");
-    exit(EXIT_FAILURE);
+    unsigned int rd = MASK11_7(cur_inst),
+		rs1 = MASK19_15(cur_inst),
+        rs2 = MASK24_20(cur_inst);
+    NEXT_LATCHES.REGS[rd] = CURRENT_LATCHES.REGS[rs1] ^ CURRENT_LATCHES.REGS[rs2];
 }
 
 
@@ -372,8 +377,13 @@ void handle_srl(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: SRL\n");
-    exit(EXIT_FAILURE);
+    unsigned int rd = MASK11_7(cur_inst),
+		rs1 = MASK19_15(cur_inst),
+        rs2 = MASK24_20(cur_inst);
+    long MAGIC = 0x00000000FFFFFFFF, long_rs1 = (long) CURRENT_LATCHES.REGS[rs1];
+    long_rs1 = long_rs1 >> CURRENT_LATCHES.REGS[rs2];
+    MAGIC = MAGIC >> CURRENT_LATCHES.REGS[rs2];
+    NEXT_LATCHES.REGS[rd] = (int) (long_rs1 & MAGIC);
 }
 
 
@@ -381,8 +391,10 @@ void handle_sra(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: SRA\n");
-    exit(EXIT_FAILURE);
+    unsigned int rd = MASK11_7(cur_inst),
+		rs1 = MASK19_15(cur_inst),
+        rs2 = MASK24_20(cur_inst);
+    NEXT_LATCHES.REGS[rd] = CURRENT_LATCHES.REGS[rs1] >> CURRENT_LATCHES.REGS[rs2];
 }
 
 
@@ -390,8 +402,10 @@ void handle_or(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: OR\n");
-    exit(EXIT_FAILURE);
+    unsigned int rd = MASK11_7(cur_inst),
+		rs1 = MASK19_15(cur_inst),
+        rs2 = MASK24_20(cur_inst);
+    NEXT_LATCHES.REGS[rd] = CURRENT_LATCHES.REGS[rs1] | CURRENT_LATCHES.REGS[rs2];
 }
 
 
@@ -399,8 +413,10 @@ void handle_and(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: AND\n");
-    exit(EXIT_FAILURE);
+    unsigned int rd = MASK11_7(cur_inst),
+		rs1 = MASK19_15(cur_inst),
+        rs2 = MASK24_20(cur_inst);
+    NEXT_LATCHES.REGS[rd] = CURRENT_LATCHES.REGS[rs1] & CURRENT_LATCHES.REGS[rs2];
 }
 
 
@@ -408,8 +424,10 @@ void handle_jalr(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: JALR\n");
-    exit(EXIT_FAILURE);
+    unsigned int rd = MASK11_7(cur_inst), rs1 = MASK19_15(cur_inst);
+    int imm12 = sext(MASK31_20(cur_inst), 12);
+    NEXT_LATCHES.PC = CURRENT_LATCHES.REGS[rs1] + imm12;
+    NEXT_LATCHES.REGS[rd] = CURRENT_LATCHES.PC + 4;
 }
 
 
@@ -417,8 +435,13 @@ void handle_jal(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: JAL\n");
-    exit(EXIT_FAILURE);
+    unsigned int rd = MASK11_7(cur_inst);
+    int imm20 = (MASK31(cur_inst) << 20) + \
+            (MASK30_21(cur_inst) << 1) + \
+            (MASK20(cur_inst) << 11) + \
+            (MASK19_12(cur_inst) << 12);
+    NEXT_LATCHES.PC = CURRENT_LATCHES.PC + sext(imm20, 20);
+    NEXT_LATCHES.REGS[rd] = CURRENT_LATCHES.PC + 4;
 }
 
 
@@ -437,8 +460,13 @@ void handle_bne(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: BNE\n");
-    exit(EXIT_FAILURE);
+    unsigned int rs1 = MASK19_15(cur_inst), rs2 = MASK24_20(cur_inst);
+    int imm12 = (MASK31(cur_inst) << 12) + \
+            (MASK7(cur_inst) << 11) + \
+            (MASK30_25(cur_inst) << 5) + \
+            (MASK11_8(cur_inst) << 1);
+    if (CURRENT_LATCHES.REGS[rs1] != CURRENT_LATCHES.REGS[rs2])
+        NEXT_LATCHES.PC = sext(imm12, 12) + CURRENT_LATCHES.PC;
 }
 
 
@@ -446,8 +474,13 @@ void handle_blt(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: BLT\n");
-    exit(EXIT_FAILURE);
+    unsigned int rs1 = MASK19_15(cur_inst), rs2 = MASK24_20(cur_inst);
+    int imm12 = (MASK31(cur_inst) << 12) + \
+            (MASK7(cur_inst) << 11) + \
+            (MASK30_25(cur_inst) << 5) + \
+            (MASK11_8(cur_inst) << 1);
+    if (CURRENT_LATCHES.REGS[rs1] < CURRENT_LATCHES.REGS[rs2])
+        NEXT_LATCHES.PC = sext(imm12, 12) + CURRENT_LATCHES.PC;
 }
 
 
@@ -455,8 +488,13 @@ void handle_bge(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: BGE\n");
-    exit(EXIT_FAILURE);
+    unsigned int rs1 = MASK19_15(cur_inst), rs2 = MASK24_20(cur_inst);
+    int imm12 = (MASK31(cur_inst) << 12) + \
+            (MASK7(cur_inst) << 11) + \
+            (MASK30_25(cur_inst) << 5) + \
+            (MASK11_8(cur_inst) << 1);
+    if (CURRENT_LATCHES.REGS[rs1] >= CURRENT_LATCHES.REGS[rs2])
+        NEXT_LATCHES.PC = sext(imm12, 12) + CURRENT_LATCHES.PC;
 }
 
 
@@ -471,16 +509,18 @@ void handle_lh(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: LH\n");
-    exit(EXIT_FAILURE);
+    unsigned int rd = MASK11_7(cur_inst), rs1 = MASK19_15(cur_inst);
+    int imm12 = MASK31_20(cur_inst);
+    NEXT_LATCHES.REGS[rd] = sext(MASK15_0(MEMORY[sext(imm12, 12) + CURRENT_LATCHES.REGS[rs1]] + (MEMORY[sext(imm12, 12) + CURRENT_LATCHES.REGS[rs1] + 1] << 8)), 16);
 }
 
 void handle_lw(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: LW\n");
-    exit(EXIT_FAILURE);
+    unsigned int rd = MASK11_7(cur_inst), rs1 = MASK19_15(cur_inst);
+    int imm12 = MASK31_20(cur_inst);
+    NEXT_LATCHES.REGS[rd] = MEMORY[sext(imm12, 12) + CURRENT_LATCHES.REGS[rs1]] + (MEMORY[sext(imm12, 12) + CURRENT_LATCHES.REGS[rs1] + 1] << 8) + (MEMORY[sext(imm12, 12) + CURRENT_LATCHES.REGS[rs1] + 2] << 16) + (MEMORY[sext(imm12, 12) + CURRENT_LATCHES.REGS[rs1] + 3] << 24);
 }
 
 
@@ -488,8 +528,9 @@ void handle_sb(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: SB\n");
-    exit(EXIT_FAILURE);
+    unsigned int rs1 = MASK19_15(cur_inst), rs2 = MASK24_20(cur_inst);
+    int imm12 = (MASK31_25(cur_inst) << 5) + MASK11_7(cur_inst);
+    MEMORY[sext(imm12, 12) + CURRENT_LATCHES.REGS[rs1]] = MASK7_0(CURRENT_LATCHES.REGS[rs2]);
 }
 
 
@@ -497,8 +538,10 @@ void handle_sh(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: SH\n");
-    exit(EXIT_FAILURE);
+    unsigned int rs1 = MASK19_15(cur_inst), rs2 = MASK24_20(cur_inst);
+    int imm12 = (MASK31_25(cur_inst) << 5) + MASK11_7(cur_inst);
+    MEMORY[sext(imm12, 12) + CURRENT_LATCHES.REGS[rs1]] = MASK7_0(CURRENT_LATCHES.REGS[rs2]);
+    MEMORY[sext(imm12, 12) + CURRENT_LATCHES.REGS[rs1] + 1] = MASK15_8(CURRENT_LATCHES.REGS[rs2]);
 }
 
 
@@ -506,10 +549,13 @@ void handle_sw(unsigned int cur_inst) {
     /*
      * Lab2-2 assignment
      */
-    warn("Lab2-2 assignment: SW\n");
-    exit(EXIT_FAILURE);
+    unsigned int rs1 = MASK19_15(cur_inst), rs2 = MASK24_20(cur_inst);
+    int imm12 = (MASK31_25(cur_inst) << 5) + MASK11_7(cur_inst);
+    MEMORY[sext(imm12, 12) + CURRENT_LATCHES.REGS[rs1]] = MASK7_0(CURRENT_LATCHES.REGS[rs2]);
+    MEMORY[sext(imm12, 12) + CURRENT_LATCHES.REGS[rs1] + 1] = MASK15_8(CURRENT_LATCHES.REGS[rs2]);
+    MEMORY[sext(imm12, 12) + CURRENT_LATCHES.REGS[rs1] + 2] = MASK23_16(CURRENT_LATCHES.REGS[rs2]);
+    MEMORY[sext(imm12, 12) + CURRENT_LATCHES.REGS[rs1] + 3] = MASK31_24(CURRENT_LATCHES.REGS[rs2]);
 }
-
 
 void handle_halt(unsigned int cur_inst) {
 	unsigned int s0 = 8;
@@ -575,9 +621,95 @@ void handle_instruction() {
             else
                 error("unknown opcode 0x%08x is captured.\n", cur_inst);
             break;
-        /*
-         * Lab2-2 assignment: Decode other types of RV32I instructions
-         */
+        case (0x33):
+            switch (funct3) {
+                case 0:
+                    if (MASK31_25(cur_inst) == 0) {
+                        handle_add(cur_inst);
+                    } else {
+                        handle_sub(cur_inst);
+                    }
+                    break;
+                case 1:
+                    handle_sll(cur_inst);
+                    break;
+                case 4:
+                    handle_xor(cur_inst);
+                    break;
+                case 5:
+                    if (MASK31_25(cur_inst) == 0) {
+                        handle_srl(cur_inst);
+                    } else {
+                        handle_sra(cur_inst);
+                    }
+                    break;
+                case 6:
+                    handle_or(cur_inst);
+                    break;
+                case 7:
+                    handle_and(cur_inst);
+                    break;
+                default:
+                    error("unknown opcode 0x%08x is captured.\n", cur_inst);
+            }
+            break;
+        case (0x6F):
+            handle_jal(cur_inst);
+            break;
+        case (0x67):
+            handle_jalr(cur_inst);
+            break;
+        case (0x63):
+            switch (funct3) {
+                case 0:
+                    handle_beq(cur_inst);
+                    break;
+                case 1:
+                    handle_bne(cur_inst);
+                    break;
+                case 4:
+                    handle_blt(cur_inst);
+                    break;
+                case 5:
+                    handle_bge(cur_inst);
+                    break;
+                default:
+                    error("unknown opcode 0x%08x is captured.\n", cur_inst);
+            }
+            break;
+        case (0x03):
+            switch (funct3) {
+                case 0:
+                    handle_lb(cur_inst);
+                    break;
+                case 1:
+                    handle_lh(cur_inst);
+                    break;
+                case 2:
+                    handle_lw(cur_inst);
+                    break;
+                default:
+                    error("unknown opcode 0x%08x is captured.\n", cur_inst);
+            }
+            break;
+        case (0x23):
+            switch (funct3) {
+                case 0:
+                    handle_sb(cur_inst);
+                    break;
+                case 1:
+                    handle_sh(cur_inst);
+                    break;
+                case 2:
+                    handle_sw(cur_inst);
+                    break;
+                default:
+                    error("unknown opcode 0x%08x is captured.\n", cur_inst);
+            }
+            break;
+        case (0x37):
+            handle_lui(cur_inst);
+            break;        
         default:
             error("unknown instruction 0x%08x is captured.\n", cur_inst);
     }
