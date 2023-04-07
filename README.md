@@ -1,3 +1,4 @@
+*Credit to [@Chen BAI](https://github.com/baichen318)*
 ## The RV32I simulator includes 24 instructions as follows
 * Integer Register-Immediate Instructions:
             slli, xori, srli, srai, ori, andi, lui
