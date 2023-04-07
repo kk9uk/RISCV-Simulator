@@ -10,3 +10,6 @@
             bne, blt, bge
 * Load and Store Instructions:
             h, lw, sb, sh, sw
+
+## Usage
+`./sim path/to/source.bin`
